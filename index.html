@@ -1,76 +1,508 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>پلیر موزیک داش دیمن</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #0b131d;
-            font-family: Tahoma, sans-serif;
-            color: #ffffff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-        }
-        .music-card {
-            background: #14213d;
-            padding: 25px;
-            border-radius: 20px;
-            border: 2px solid #ffd700;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            width: 85%;
-            max-width: 340px;
-            text-align: center;
-        }
-        .cover-img {
-            width: 110px;
-            height: 110px;
-            border-radius: 15px;
-            object-fit: cover;
-            border: 2px solid #ffd700;
-            margin-bottom: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-        h3 {
-            font-size: 16px;
-            color: #ffd700;
-            margin: 5px 0;
-        }
-        p {
-            font-size: 12px;
-            color: #cbd5e1;
-            margin: 0 0 20px 0;
-        }
-        /* پلیر استاندارد و حرفه‌ای موزیک */
-        audio {
-            width: 100%;
-            height: 45px;
-            border-radius: 10px;
-            outline: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOID STORE</title>
+<style>
+:root{
+  --bg:#f7f5ff;--card:#fff;--purple:#7857e8;
+  --purple2:#a38af7;--text:#28223c;--muted:#827c98;
+  --line:#e9e3fa;--green:#23a879;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Tahoma,Arial,sans-serif;
+  min-height:100vh;
+}
+button,input{font:inherit}
+button{cursor:pointer}
+button:active{transform:scale(.97)}
+header{
+  position:sticky;top:0;z-index:10;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  padding:14px 16px;
+}
+.topbar{
+  max-width:900px;margin:auto;display:flex;
+  align-items:center;justify-content:space-between;gap:10px;
+}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{
+  width:43px;height:43px;border-radius:15px;
+  display:grid;place-items:center;color:white;font-weight:bold;
+  font-size:18px;background:linear-gradient(135deg,#a78bfa,#6845dc);
+  box-shadow:0 6px 18px #7857e833;
+}
+.brand h1{font-size:17px;margin:0;letter-spacing:1px}
+.brand small{font-size:10px;color:var(--muted)}
+.cart-top{
+  border:0;border-radius:13px;padding:11px 14px;
+  background:#eee8ff;color:#6845dc;font-weight:bold;
+}
+#cartCount{
+  display:inline-grid;place-items:center;min-width:20px;height:20px;
+  border-radius:20px;background:var(--purple);color:white;font-size:11px;
+}
+main{max-width:900px;margin:auto;padding:20px 15px 100px}
+.page{display:none;animation:fadeIn .38s ease both}
+.page.active{display:block}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
+.hero{
+  border-radius:25px;padding:25px 21px;color:white;
+  background:linear-gradient(130deg,#8b6cf0,#6442d5);
+  box-shadow:0 12px 30px #7654df26;overflow:hidden;position:relative;
+}
+.hero:after{
+  content:"";position:absolute;width:170px;height:170px;
+  border:28px solid #ffffff13;border-radius:50%;
+  left:-50px;top:-60px;
+}
+.hero .eyebrow{font-size:11px;opacity:.85}
+.hero h2{font-size:27px;margin:13px 0 8px}
+.hero p{font-size:12px;line-height:2;margin:0;max-width:350px}
+.hero .hero-tag{
+  display:inline-block;margin-top:16px;background:#ffffff20;
+  border:1px solid #ffffff35;border-radius:10px;padding:8px 11px;
+  font-size:11px;
+}
+.section-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:10px;margin:25px 2px 14px;
+}
+.section-head h2{font-size:17px;margin:0}
+.section-head span{font-size:11px;color:var(--muted)}
+.packs{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;
+}
+.pack{
+  background:var(--card);border:1px solid var(--line);
+  border-radius:19px;padding:15px 12px;min-width:0;
+  transition:transform .22s,box-shadow .22s,border-color .22s;
+  animation:fadeIn .45s ease both;
+}
+.pack:hover{transform:translateY(-4px);box-shadow:0 10px 25px #6442d510;border-color:#c9bafa}
+.pack-art{
+  height:100px;border-radius:14px;display:grid;place-items:center;
+  position:relative;overflow:hidden;margin-bottom:13px;
+  background:linear-gradient(145deg,#f0eaff,#faf8ff);
+}
+.pack-art:before,.pack-art:after{
+  content:"";position:absolute;border-radius:50%;background:#8c6bec18;
+}
+.pack-art:before{width:100px;height:100px;top:-45px;right:-20px}
+.pack-art:after{width:70px;height:70px;bottom:-38px;left:-8px}
+.robux{
+  position:relative;z-index:1;font-size:25px;font-weight:900;
+  color:#7250dc;letter-spacing:-1px;
+}
+.robux small{font-size:10px;display:block;text-align:center;letter-spacing:2px;margin-top:3px}
+.pack h3{font-size:14px;margin:0 0 7px}
+.pack .desc{font-size:10px;color:var(--muted);margin-bottom:12px}
+.price{font-size:15px;font-weight:bold;margin-bottom:12px}
+.price small{font-size:10px;color:var(--muted);font-weight:normal}
+.primary,.secondary,.danger{
+  border:0;border-radius:12px;padding:12px;
+  font-size:12px;font-weight:bold;transition:background .2s,transform .2s;
+}
+.primary{background:var(--purple);color:white}
+.primary:hover{background:#6442d5}
+.secondary{background:#eee9ff;color:#6948d4}
+.danger{background:#fff0f0;color:#d34848}
+.pack .primary{width:100%}
+.full{width:100%}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px}
+.info{
+  background:white;border:1px solid var(--line);border-radius:15px;
+  padding:13px 8px;text-align:center;
+}
+.info strong{display:block;font-size:13px}
+.info small{display:block;color:var(--muted);font-size:10px;margin-top:6px}
+.panel{
+  background:white;border:1px solid var(--line);
+  border-radius:20px;padding:17px;margin-top:15px;
+}
+.panel h3{font-size:15px;margin:0 0 15px}
+.field{margin:14px 0}
+.field label{display:block;font-size:12px;margin-bottom:8px;font-weight:bold}
+.field input{
+  width:100%;padding:13px;border:1px solid #e4def5;
+  border-radius:12px;background:#fcfbff;color:var(--text);
+  outline:none;transition:border .2s,box-shadow .2s;
+}
+.field input:focus{border-color:var(--purple);box-shadow:0 0 0 3px #7857e81a}
+.field input::placeholder{color:#b0aabd}
+.note{font-size:11px;color:var(--muted);line-height:2}
+.cart-item{
+  display:flex;align-items:center;gap:12px;
+  border-bottom:1px solid var(--line);padding:13px 0;
+}
+.cart-item:last-child{border-bottom:0}
+.mini-art{
+  width:51px;height:51px;border-radius:13px;flex-shrink:0;
+  display:grid;place-items:center;background:#f0eaff;color:#7857e8;
+  font-size:12px;font-weight:bold;
+}
+.item-info{flex:1;min-width:0}
+.item-info strong{font-size:12px;display:block}
+.item-info small{font-size:10px;color:var(--muted);display:block;margin-top:5px}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{
+  width:27px;height:27px;border:0;border-radius:9px;
+  background:#eee8ff;color:#6845dc;font-weight:bold;
+}
+.qty span{font-size:12px;min-width:12px;text-align:center}
+.total{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:16px;padding-top:15px;border-top:1px dashed #ded5f4;
+  font-size:13px;font-weight:bold;
+}
+.empty{text-align:center;padding:35px 10px;color:var(--muted)}
+.empty .empty-icon{font-size:34px;color:#a38af7;margin-bottom:12px}
+.empty strong{display:block;color:var(--text);font-size:14px;margin-bottom:8px}
+.empty p{font-size:11px;line-height:2}
+.order-card{
+  padding:14px;border:1px solid var(--line);border-radius:14px;
+  margin:10px 0;font-size:12px;line-height:2;overflow-wrap:anywhere;
+}
+.status{display:inline-block;background:#fff4db;color:#926313;padding:4px 8px;border-radius:8px;font-size:10px}
+.support-icon{
+  width:65px;height:65px;border-radius:21px;
+  display:grid;place-items:center;background:#eee8ff;color:#7654df;
+  font-size:27px;margin:0 auto 14px;
+}
+.support{text-align:center}
+.support h2{font-size:20px}
+.support p{font-size:12px;color:var(--muted);line-height:2}
+footer{
+  text-align:center;color:#aaa2b8;font-size:10px;padding:20px 0 5px;
+}
+nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:20;
+  background:rgba(255,255,255,.94);backdrop-filter:blur(14px);
+  border-top:1px solid var(--line);padding:8px 5px calc(8px + env(safe-area-inset-bottom));
+}
+.nav-inner{max-width:600px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+.nav-btn{
+  border:0;background:transparent;color:#928aa6;border-radius:13px;
+  padding:8px 2px;font-size:10px;transition:all .2s;
+}
+.nav-btn .nav-icon{display:block;font-size:19px;margin-bottom:5px}
+.nav-btn.active{background:#f0eaff;color:#704cdb;font-weight:bold}
+.toast{
+  position:fixed;z-index:50;bottom:90px;left:50%;
+  transform:translate(-50%,15px);opacity:0;pointer-events:none;
+  background:#29223b;color:white;padding:12px 17px;border-radius:13px;
+  font-size:12px;box-shadow:0 8px 25px #0002;
+  transition:opacity .25s,transform .25s;white-space:nowrap;max-width:90%;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:600px){
+  .packs{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .hero{padding:34px}
+  .hero h2{font-size:32px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
+</style>
 </head>
 <body>
+<header>
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">V</div>
+      <div><h1>VOID STORE</h1><small>فروشگاه پکیج‌های روباکس</small></div>
+    </div>
+    <button class="cart-top" onclick="showPage('cart')">سبد خرید <span id="cartCount">0</span></button>
+  </div>
+</header>
 
-    <div class="music-card">
-        <!-- کاور یا عکس سلطنتی -->
-        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e0/Reza_Shah_Pahlavi_in_military_uniform.jpg" alt="Cover" class="cover-img">
-        
-        <!-- اطلاعات آهنگ -->
-        <h3>Hossein Tiem - Pistol</h3>
-        <p>موزیک ویژه در پایگاه داش دیمن</p>
-
-        <!-- پلیر اصلی با لینک مستقیم آهنگ شما -->
-        <audio controls preload="metadata">
-            <source src="https://irsv.upmusics.com/singletracks/2026/06/Hossein%20Tiem%20-%20Pistol%20UpMusics.mp3" type="audio/mp3">
-            مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
-        </audio>
+<main>
+  <section id="shop" class="page active">
+    <div class="hero">
+      <div class="eyebrow">VOID STORE · ROBUX SHOP</div>
+      <h2>دنیای روباکس،<br>یک قدم نزدیک‌تر</h2>
+      <p>پک موردنظرت رو انتخاب کن و سفارشت رو ثبت کن.</p>
+      <span class="hero-tag">فروشگاه اختصاصی VOID</span>
     </div>
 
+    <div class="info-grid">
+      <div class="info"><strong>۴ پک</strong><small>پک‌های فروشگاه</small></div>
+      <div class="info"><strong>ساده</strong><small>ثبت اطلاعات سفارش</small></div>
+      <div class="info"><strong>پشتیبانی</strong><small>ارتباط تلگرامی</small></div>
+    </div>
+
+    <div class="section-head"><h2>پک‌های روباکس</h2><span>پک دلخواهت رو انتخاب کن</span></div>
+    <div class="packs" id="packs"></div>
+    <footer>VOID STORE · همه حقوق محفوظ است</footer>
+  </section>
+
+  <section id="cart" class="page">
+    <div class="section-head"><h2>سبد خرید</h2><span>مدیریت پک‌های انتخابی</span></div>
+    <div class="panel">
+      <div id="cartItems"></div>
+      <div id="cartBottom" hidden>
+        <div class="total"><span>مجموع سفارش</span><span id="cartTotal">۰ تومان</span></div>
+        <button class="primary full" style="margin-top:15px" onclick="showPage('checkout')">ادامه و ثبت سفارش</button>
+        <button class="secondary full" style="margin-top:9px" onclick="showPage('shop')">بازگشت به فروشگاه</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="checkout" class="page">
+    <div class="section-head"><h2>ثبت سفارش</h2><span>اطلاعات تماس</span></div>
+    <div class="panel">
+      <h3>اطلاعات خریدار</h3>
+      <form id="orderForm">
+        <div class="field">
+          <label for="robloxName">نام کاربری Roblox</label>
+          <input id="robloxName" required maxlength="20" placeholder="نام کاربری روبلاکس">
+        </div>
+        <div class="field">
+          <label for="phone">شماره موبایل</label>
+          <input id="phone" required inputmode="numeric" type="tel" maxlength="11" placeholder="مثلاً 09121234567">
+        </div>
+        <p class="note">رمز عبور حساب Roblox را وارد نکن. برای ثبت سفارش نیازی به رمزت نیست.</p>
+        <div class="total"><span>مبلغ سفارش</span><span id="checkoutTotal">۰ تومان</span></div>
+        <button class="primary full" style="margin-top:16px" type="submit">ثبت سفارش</button>
+      </form>
+    </div>
+  </section>
+
+  <section id="orders" class="page">
+    <div class="section-head"><h2>سفارش‌های من</h2><span>سوابق همین نشست</span></div>
+    <div class="panel" id="ordersList"></div>
+    <p class="note">این نسخه آزمایشی است. سفارش‌ها روی سرور ذخیره نمی‌شوند و فقط در همین صفحه تا زمان بسته‌شدن یا تازه‌سازی آن باقی می‌مانند.</p>
+  </section>
+
+  <section id="support" class="page">
+    <div class="panel support">
+      <div class="support-icon">✉</div>
+      <h2>پشتیبانی VOID</h2>
+      <p>برای پیگیری سفارش یا دریافت راهنمایی، از طریق تلگرام با پشتیبانی تماس بگیر.</p>
+      <button class="primary full" onclick="openSupport()">ارتباط با پشتیبانی تلگرام</button>
+      <p style="margin-top:18px">آیدی پشتیبانی</p>
+      <strong dir="ltr">@TheM4HOOR</strong>
+      <button class="secondary full" style="margin-top:15px" onclick="copySupport()">کپی آیدی پشتیبانی</button>
+    </div>
+  </section>
+</main>
+
+<nav>
+  <div class="nav-inner">
+    <button class="nav-btn active" data-page="shop" onclick="showPage('shop')"><span class="nav-icon">⌂</span>فروشگاه</button>
+    <button class="nav-btn" data-page="cart" onclick="showPage('cart')"><span class="nav-icon">▣</span>سبد خرید</button>
+    <button class="nav-btn" data-page="orders" onclick="showPage('orders')"><span class="nav-icon">▤</span>سفارش‌ها</button>
+    <button class="nav-btn" data-page="support" onclick="showPage('support')"><span class="nav-icon">♧</span>پشتیبانی</button>
+  </div>
+</nav>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+const PRODUCTS = [
+  {id:1,amount:80,price:145000,name:"پک ۸۰ روباکس",desc:"پک اقتصادی"},
+  {id:2,amount:160,price:280000,name:"پک ۱۶۰ روباکس",desc:"پک محبوب"},
+  {id:3,amount:400,price:680000,name:"پک ۴۰۰ روباکس",desc:"پک ویژه"},
+  {id:4,amount:800,price:1300000,name:"پک ۸۰۰ روباکس",desc:"پک بزرگ"}
+];
+
+const cart = {};
+const orders = [];
+const $ = id => document.getElementById(id);
+const money = n => Math.round(n).toLocaleString("fa-IR") + " تومان";
+let toastTimer;
+
+function notify(message){
+  const t=$("toast");
+  t.textContent=message;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove("show"),2400);
+}
+
+function showPage(id){
+  const target=$(id);
+  if(!target){notify("این صفحه پیدا نشد.");return;}
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+  target.classList.add("active");
+  if(id==="cart")renderCart();
+  if(id==="orders")renderOrders();
+  if(id==="checkout")updateCheckoutTotal();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderPacks(){
+  $("packs").innerHTML=PRODUCTS.map((p,i)=>`
+    <article class="pack" style="animation-delay:${i*70}ms">
+      <div class="pack-art"><div class="robux">${p.amount.toLocaleString("en-US")}<small>ROBUX</small></div></div>
+      <h3>${p.name}</h3>
+      <div class="desc">${p.desc}</div>
+      <div class="price">${p.price.toLocaleString("fa-IR")} <small>تومان</small></div>
+      <button class="primary" onclick="addToCart(${p.id})">افزودن به سبد</button>
+    </article>`).join("");
+}
+
+function cartCount(){
+  return Object.values(cart).reduce((sum,n)=>sum+n,0);
+}
+function cartTotal(){
+  return PRODUCTS.reduce((sum,p)=>sum+p.price*(cart[p.id]||0),0);
+}
+function updateCartBadge(){
+  $("cartCount").textContent=cartCount().toLocaleString("fa-IR");
+}
+
+function addToCart(id){
+  const p=PRODUCTS.find(x=>x.id===id);
+  if(!p)return;
+  cart[id]=(cart[id]||0)+1;
+  updateCartBadge();
+  renderCart();
+  notify(p.name+" به سبد اضافه شد");
+}
+
+function changeQty(id,delta){
+  if(!cart[id])return;
+  cart[id]+=delta;
+  if(cart[id]<=0)delete cart[id];
+  updateCartBadge();
+  renderCart();
+}
+
+function renderCart(){
+  const ids=Object.keys(cart);
+  $("cartBottom").hidden=ids.length===0;
+  if(!ids.length){
+    $("cartItems").innerHTML=`
+      <div class="empty"><div class="empty-icon">▣</div>
+      <strong>سبد خرید خالیه</strong><p>اول از فروشگاه یک پک انتخاب کن.</p>
+      <button class="primary" onclick="showPage('shop')">رفتن به فروشگاه</button></div>`;
+  }else{
+    $("cartItems").innerHTML=ids.map(id=>{
+      const p=PRODUCTS.find(x=>x.id===Number(id));
+      return `<div class="cart-item">
+        <div class="mini-art">${p.amount}</div>
+        <div class="item-info"><strong>${p.name}</strong><small>${money(p.price*cart[id])}</small></div>
+        <div class="qty">
+          <button onclick="changeQty(${p.id},-1)" aria-label="کم کردن">−</button>
+          <span>${cart[id].toLocaleString("fa-IR")}</span>
+          <button onclick="changeQty(${p.id},1)" aria-label="زیاد کردن">+</button>
+        </div></div>`;
+    }).join("");
+    $("cartTotal").textContent=money(cartTotal());
+  }
+  updateCheckoutTotal();
+}
+
+function updateCheckoutTotal(){
+  $("checkoutTotal").textContent=money(cartTotal());
+}
+
+function renderOrders(){
+  if(!orders.length){
+    $("ordersList").innerHTML=`<div class="empty"><div class="empty-icon">▤</div><strong>هنوز سفارشی ثبت نکردی</strong><p>سفارش‌های آزمایشی بعد از ثبت در اینجا دیده می‌شوند.</p><button class="primary" onclick="showPage('shop')">مشاهده پک‌ها</button></div>`;
+    return;
+  }
+  $("ordersList").innerHTML=orders.slice().reverse().map(o=>`
+    <div class="order-card">
+      <strong>سفارش ${o.id}</strong><br>
+      نام کاربری: ${escapeHTML(o.username)}<br>
+      شماره تماس: ${escapeHTML(o.phone)}<br>
+      پک‌ها: ${o.items}<br>
+      مبلغ: <strong>${money(o.total)}</strong><br>
+      <span class="status">ثبت آزمایشی، پرداخت تأیید نشده</span>
+    </div>`).join("");
+}
+
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+$("phone").addEventListener("input",e=>{
+  e.target.value=e.target.value.replace(/\D/g,"").slice(0,11);
+});
+
+$("orderForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  if(cartCount()===0){
+    notify("سبد خریدت خالیه.");
+    showPage("shop");
+    return;
+  }
+  const username=$("robloxName").value.trim();
+  const phone=$("phone").value.trim();
+
+  if(username.length<3){
+    notify("نام کاربری Roblox را بررسی کن.");
+    $("robloxName").focus();
+    return;
+  }
+  if(!/^09\d{9}$/.test(phone)){
+    notify("شماره موبایل باید ۱۱ رقم و با 09 شروع شود.");
+    $("phone").focus();
+    return;
+  }
+
+  const items=PRODUCTS.filter(p=>cart[p.id]).map(p=>
+    `${p.amount} روباکس × ${cart[p.id]}`
+  ).join("، ");
+
+  const order={
+    id:Date.now().toString().slice(-7),
+    username,phone,items,total:cartTotal()
+  };
+  orders.push(order);
+
+  // نسخه نمایشی: این اطلاعات هنوز به فروشنده یا تلگرام ارسال نمی‌شوند.
+  const message=
+    `سفارش آزمایشی VOID STORE\n`+
+    `شماره سفارش: ${order.id}\n`+
+    `نام کاربری: ${username}\n`+
+    `شماره تماس: ${phone}\n`+
+    `پک‌ها: ${items}\n`+
+    `مبلغ: ${money(order.total)}`;
+
+  $("orderForm").reset();
+  Object.keys(cart).forEach(k=>delete cart[k]);
+  updateCartBadge();
+  renderCart();
+  renderOrders();
+  showPage("orders");
+  notify("سفارش آزمایشی ثبت شد");
+  console.log(message);
+});
+
+function openSupport(){
+  window.open("https://t.me/TheM4HOOR","_blank","noopener");
+}
+function copySupport(){
+  const value="@TheM4HOOR";
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(value)
+      .then(()=>notify("آیدی کپی شد"))
+      .catch(()=>notify("آیدی: "+value));
+  }else{
+    notify("آیدی پشتیبانی: "+value);
+  }
+}
+
+renderPacks();
+renderCart();
+renderOrders();
+</script>
 </body>
 </html>
